@@ -5,7 +5,14 @@ gem 'rails', '3.2.1'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'pg'
+gem 'twilio-ruby'
+gem 'faraday'
+gem "compass", :git => "git://github.com/chriseppstein/compass.git"
+gem 'devise'
+gem 'haml'
+gem 'hpricot'
+gem 'dynamic_form'
+gem "simple_form"
 gem 'anypresence_extension', '0.0.1', :path => 'vendor/gems/anypresence_extension-0.0.1'
 
 
@@ -32,5 +39,21 @@ gem 'jquery-rails'
 # Deploy with Capistrano
 # gem 'capistrano'
 
-# To use debugger
-gem 'ruby-debug19', :require => 'ruby-debug'
+group :test, :development do
+  gem 'local-env'
+  gem 'pg'
+  gem 'rspec-rails', '~> 2.5'
+  gem 'ruby-debug19'
+end
+
+group :production do
+  gem 'pg'
+end
+
+group :test do
+  gem 'factory_girl'
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'webmock'
+  gem 'vcr'
+end
