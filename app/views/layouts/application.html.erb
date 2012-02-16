@@ -2,9 +2,16 @@
 <html>
 <head>
   <title>VoiceExtension</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
+  <%= stylesheet_link_tag    "application" %>
+   <%= stylesheet_link_tag (request.ssl? ? 'https' : 'http') + '://yui.yahooapis.com/combo?3.4.1/build/cssreset/reset-min.css&3.4.1/build/cssfonts/fonts-min.css&3.4.1/build/cssgrids/grids-min.css' %>
+   <%= stylesheet_link_tag (request.ssl? ? 'https' : 'http') + '://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css' %>
+   <%= chameleon_stylesheet_link %>
+   <%= stylesheet_link_tag    "voice" %>
+   <%= javascript_include_tag "application" %>
+   <%= csrf_meta_tags %>
+   <style>
+     body { background-color: #F5F5F5; }
+   </style>
 </head>
 <body>
 

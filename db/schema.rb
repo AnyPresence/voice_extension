@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120213220821) do
+ActiveRecord::Schema.define(:version => 20120216192634) do
 
   create_table "accounts", :force => true do |t|
     t.datetime "remember_created_at"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(:version => 20120213220821) do
     t.string   "extension_id"
     t.string   "api_version"
     t.string   "api_host"
+    t.string   "consume_phone_number"
   end
 
   add_index "accounts", ["application_id"], :name => "index_accounts_on_application_id", :unique => true
@@ -38,6 +39,14 @@ ActiveRecord::Schema.define(:version => 20120213220821) do
     t.string   "format"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "messages", :force => true do |t|
+    t.string   "account_sid"
+    t.string   "from"
+    t.string   "to"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
 end

@@ -3,7 +3,9 @@ class VoiceController < ApplicationController
   before_filter :authenticate_from_anypresence, :only => [:deprovision, :settings, :publish]
   
   # Normal Devise authentication logic
-  before_filter :authenticate_account!, :except => [:unauthorized, :provision, :consume]
+  before_filter :authenticate_account!, :except => [:unauthorized, :provision, :consume, :menu]
+  
+  before_filter :build_twilio_wrapper, :only => [:settings, :generate_consume_phone_number]
   
   # This creates an account on our side tied to the application and renders back the expected result to create a new add on instance.
   def provision
@@ -48,10 +50,46 @@ class VoiceController < ApplicationController
   def voice
   end
   
+  # This renders our settings page and handles updates of the account.
   def settings
     if request.put?
+      if params[:account][:consume_phone_number] == "N/A"
+        consume_phone_number = params[:account][:consume_phone_number] = nil
+      else
+        consume_phone_number = params[:account][:consume_phone_number]
+      end
+
+      # Check if we should provision this phone number, or if we own it already.
+      if current_account.consume_phone_number.nil? && !consume_phone_number.nil?
+        # Check if we have a phone number available. 
+        if @consumer.provision_new_phone_number?(consume_phone_number)
+          begin
+            # Let's buy this phone number.
+            @consumer.provision_new_phone_number(consume_phone_number, ENV['VOICE_CONSUME_URL'])
+          rescue
+            params[:account][:consume_phone_number] = nil
+          end
+        else
+          # Use the phone number we already own but update the sms url.
+          begin
+            @consumer.update_voice_url(consume_phone_number)
+          rescue
+            Rails.logger.error $!
+            Rails.logger.error $!.backtrace
+            flash[:alert] = "Unable to update the url to consume Voice on Twilio."
+          end
+        end
+      end
+
+      if current_account.update_attributes params[:account]
+        flash[:notice] = "Account updated."
+      else
+        flash[:alert] = "Account could not be updated."
+      end
+
       redirect_to settings_path
     end
+
   end
   
   # This is the endpoint for when new applications are published
@@ -71,27 +109,39 @@ class VoiceController < ApplicationController
     end
   end
   
+  def menu
+    response = Twilio::TwiML::Response.new do |r|
+      r.Say "You pressed, #{params[:Digits]}, Geting latest information for " + params[:object_name], :voice => 'woman'
+    end
+    
+    render :text => response.text
+  end
+  
   def consume
-    Rails.logger.info "params are: " + params.inspect
     account = Account.where(:consume_phone_number => params[:To]).first
     objects = account.object_definition_mappings
     Rails.logger.info "objects: " + objects.inspect
     
-    options = MenuOption::build_menu_option objects
     begin
-      response = Twilio::TwiML::Response.new do |r|
-        r.Say "Hello, Welcome to Anypresence's voice system:", :voice => 'woman'
-        # List out available object definitions
-        options.values.each do |v|
-          r.Say v, :voice => 'woman'
-        end
-        # Finished
-        r.Say 'Goodbye!', :voice => 'woman'
-      end
+      response = MenuOption::build_menu_option objects
       
       render :text => response.text
     rescue
       Rails.logger.error $!.message
+      render :text => 'Error!'
+    end
+  end
+
+  # Generates a phone number to consume SMS
+  def generate_consume_phone_number
+    if current_account.consume_phone_number.nil?
+      first_available_owned_number = @consumer.find_available_purchased_phone_number(Account::get_used_phone_numbers)
+      # Try to obtain a new number from Twilio
+      current_account.consume_phone_number =  first_available_owned_number.nil? ? @consumer.get_phone_number_to_purchase(params[:area_code]) : first_available_owned_number
+    end
+    
+    respond_to do |format|  
+      format.js
     end
   end
   
@@ -143,5 +193,10 @@ protected
     else
       @object_definition_name = request.env["HTTP_X_AP_OBJECT_DEFINITION_NAME"]
     end
+  end
+
+  # Builds the +Consumer+ which accesses Twilio.
+  def build_twilio_wrapper
+    @consumer = TwilioVoiceWrapper::Voice.new(current_account.id)
   end
 end
