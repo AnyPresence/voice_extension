@@ -4,7 +4,7 @@ class VoiceController < ApplicationController
   
   # Normal Devise authentication logic
   before_filter :authenticate_account!, :except => [:unauthorized, :provision, :consume, :menu]
-  
+  before_filter :find_api_version, :only => [:provision, :publish]
   before_filter :build_twilio_wrapper, :only => [:settings, :generate_consume_phone_number]
   
   # This creates an account on our side tied to the application and renders back the expected result to create a new add on instance.
@@ -140,6 +140,13 @@ class VoiceController < ApplicationController
       current_account.consume_phone_number =  first_available_owned_number.nil? ? @consumer.get_phone_number_to_purchase(params[:area_code]) : first_available_owned_number
     end
     
+    respond_to do |format|  
+      format.js
+    end
+  end
+  
+  # Try to call
+  def test_call
     respond_to do |format|  
       format.js
     end
