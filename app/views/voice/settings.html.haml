@@ -23,4 +23,12 @@
             = text_field_tag :area_code, params[:area_code], :size => 3
             = link_to "Generate", generate_consume_phone_number_path, :remote => true
       %div.yui3-u-1-4
+        = link_to "Build menu option", account_menu_options_path(current_account)
+        %br
+        %br
         = f.button :submit, "Update Account"
+
+          
+
+          
+      

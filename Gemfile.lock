@@ -98,6 +98,7 @@ GEM
       json (>= 1.2.4)
     linecache19 (0.5.12)
       ruby_core_source (>= 0.1.4)
+    liquid (2.3.0)
     local-env (0.0.1)
     mail (2.4.1)
       i18n (>= 0.4.0)
@@ -214,6 +215,7 @@ DEPENDENCIES
   haml
   hpricot
   jquery-rails
+  liquid
   local-env
   pg
   rails (= 3.2.1)

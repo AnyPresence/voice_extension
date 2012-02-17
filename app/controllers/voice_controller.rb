@@ -5,7 +5,7 @@ class VoiceController < ApplicationController
   # Normal Devise authentication logic
   before_filter :authenticate_account!, :except => [:unauthorized, :provision, :consume, :menu]
   before_filter :find_api_version, :only => [:provision, :publish]
-  before_filter :build_twilio_wrapper, :only => [:settings, :generate_consume_phone_number]
+  before_filter :build_twilio_wrapper, :only => [:settings, :make_call, :generate_consume_phone_number]
   
   # This creates an account on our side tied to the application and renders back the expected result to create a new add on instance.
   def provision
@@ -62,17 +62,17 @@ class VoiceController < ApplicationController
       # Check if we should provision this phone number, or if we own it already.
       if current_account.consume_phone_number.nil? && !consume_phone_number.nil?
         # Check if we have a phone number available. 
-        if @consumer.provision_new_phone_number?(consume_phone_number)
+        if @twilio_wrapper.provision_new_phone_number?(consume_phone_number)
           begin
             # Let's buy this phone number.
-            @consumer.provision_new_phone_number(consume_phone_number, ENV['VOICE_CONSUME_URL'])
+            @twilio_wrapper.provision_new_phone_number(consume_phone_number, ENV['VOICE_CONSUME_URL'])
           rescue
             params[:account][:consume_phone_number] = nil
           end
         else
           # Use the phone number we already own but update the sms url.
           begin
-            @consumer.update_voice_url(consume_phone_number)
+            @twilio_wrapper.update_voice_url(consume_phone_number)
           rescue
             Rails.logger.error $!
             Rails.logger.error $!.backtrace
@@ -110,8 +110,13 @@ class VoiceController < ApplicationController
   end
   
   def menu
+    account = Account.where(:consume_phone_number => params[:To]).first
+    format = account.menu_options.where(:name => params[:object_name].downcase.strip)
+    response_text = account.object_instances(params[:object_name], format)
     response = Twilio::TwiML::Response.new do |r|
-      r.Say "You pressed, #{params[:Digits]}, Geting latest information for " + params[:object_name], :voice => 'woman'
+      r.Say "You pressed, #{params[:Digits]}, Geting latest information for #{params[:object_name]}", :voice => 'woman'
+      
+      r.Say "There is an #{params[:object_name]}: #{response_text}", :voice => 'woman'
     end
     
     render :text => response.text
@@ -135,18 +140,11 @@ class VoiceController < ApplicationController
   # Generates a phone number to consume SMS
   def generate_consume_phone_number
     if current_account.consume_phone_number.nil?
-      first_available_owned_number = @consumer.find_available_purchased_phone_number(Account::get_used_phone_numbers)
+      first_available_owned_number = @twilio_wrapper.find_available_purchased_phone_number(Account::get_used_phone_numbers)
       # Try to obtain a new number from Twilio
-      current_account.consume_phone_number =  first_available_owned_number.nil? ? @consumer.get_phone_number_to_purchase(params[:area_code]) : first_available_owned_number
+      current_account.consume_phone_number =  first_available_owned_number.nil? ? @twilio_wrapper.get_phone_number_to_purchase(params[:area_code]) : first_available_owned_number
     end
     
-    respond_to do |format|  
-      format.js
-    end
-  end
-  
-  # Try to call
-  def test_call
     respond_to do |format|  
       format.js
     end
@@ -204,6 +202,6 @@ protected
 
   # Builds the +Consumer+ which accesses Twilio.
   def build_twilio_wrapper
-    @consumer = TwilioVoiceWrapper::Voice.new(current_account.id)
+    @twilio_wrapper = TwilioVoiceWrapper::Voice.new(current_account.id)
   end
 end

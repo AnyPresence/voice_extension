@@ -6,6 +6,10 @@ class Account < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :consume_phone_number
   
+  NUM_ENTRIES = 1
+  
+  has_many :menu_options, :dependent => :destroy
+  
   class << self
     def find_by_consume_phone_number(phone_number)
       Account.find_by_consume_phone_number(phone_number)
@@ -71,6 +75,41 @@ class Account < ActiveRecord::Base
       object_names << object_definition["name"].downcase
     end
     object_names
+  end
+  
+  # Gets object instances.
+  def object_instances(object_name, format)
+    # Access the latest version.
+    response = ap_client.data(object_name).fetch
+
+    parsed_json = json_decode_response('', response)     
+    
+    msg_for_client = []
+    count = 0
+    parsed_json.each do |x|
+        break if count == NUM_ENTRIES
+        count += 1
+        msg_for_client << MenuOption::parse_format_string(format, object_name, x).to_s
+    end
+    msg_for_client
+  end
+
+private
+  def json_decode_response(url, response)
+    parsed_json = []
+    case response.status
+    when 200
+      begin
+        parsed_json = ActiveSupport::JSON.decode(response.body)
+      rescue MultiJson::DecodeError
+        raise ConsumeSms::GeneralTextMessageNotifierException, "Unable to decode the JSON message: #{url}"
+      end
+    when 301
+      raise ConsumeSms::GeneralTextMessageNotifierException, "Unexpected redirection occurred: #{url}"
+    else
+      raise ConsumeSms::GeneralTextMessageNotifierException, "Unable to get a response: #{url}"
+    end
+    parsed_json
   end
 
 end

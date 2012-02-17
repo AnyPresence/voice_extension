@@ -45,6 +45,10 @@ module TwilioVoiceWrapper
       numbers.first.phone_number if !numbers.nil?
     end
     
+    def make_call(options) 
+      twilio_account.calls.create options
+    end
+    
     # Updates VOICE_URL for phone number
     def update_voice_url(phone_number)
       twilio_owned_numbers = twilio_account.incoming_phone_numbers.list

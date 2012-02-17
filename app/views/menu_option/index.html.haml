@@ -1,0 +1,8 @@
+= link_to "Go back to settings", settings_path
+
+%br
+- @menu_options.each do |option|
+  = link_to "#{option.name} - #{option.format}", [current_account, option]
+  %br
+%br
+= link_to "Add new menu option", new_account_menu_option_path(@account)

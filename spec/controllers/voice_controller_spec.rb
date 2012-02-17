@@ -62,7 +62,15 @@ describe VoiceController do
     end
 
     describe "consume voice" do
+      it "should know how to respond to key pressed by user" do
+        account = Factory.create(:account, :consume_phone_number => "+16175443724")
+        menu_option = Factory.create(:menu_option, :account => account)
+        Account.any_instance.stub(:object_instances).with("outage", [menu_option]).and_return("some stuff")
+        get :menu, :Digits => "1", :To => "+16175443724", :object_name => "outage"
+        response.body.should include("outage")
+      end
     end
+    
   end
 
 

@@ -13,4 +13,8 @@ VoiceExtension::Application.routes.draw do
   root :to => 'voice#unauthorized'
   
   devise_for :accounts
+  
+  resources :accounts do
+    resources :menu_options, :controller => "menu_option", :type => "MenuOption"
+  end
 end

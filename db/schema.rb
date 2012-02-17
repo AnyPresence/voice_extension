@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120216192634) do
+ActiveRecord::Schema.define(:version => 20120217211648) do
 
   create_table "accounts", :force => true do |t|
     t.datetime "remember_created_at"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(:version => 20120216192634) do
     t.string   "format"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "account_id"
   end
 
   create_table "messages", :force => true do |t|

@@ -10,6 +10,7 @@ gem 'faraday'
 gem "compass", :git => "git://github.com/chriseppstein/compass.git"
 gem 'devise'
 gem 'haml'
+gem 'liquid'
 gem 'hpricot'
 gem 'dynamic_form'
 gem "simple_form"
