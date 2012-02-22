@@ -4,7 +4,7 @@ class Account < ActiveRecord::Base
   devise :token_authenticatable, :rememberable, :trackable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :consume_phone_number
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :consume_phone_number, :api_host
   
   NUM_ENTRIES = 2
   

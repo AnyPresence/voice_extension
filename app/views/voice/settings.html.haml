@@ -8,9 +8,8 @@
     %p
       API version: #{current_account.api_version}
     %div.yui3-g
-      %div.yui3-u-1-4
+      %div.yui3-u-1-3
         = f.label :consume_phone_number, "Phone number to consume voice:"
-        %br
         - if !current_account.consume_phone_number.nil?
           = f.text_field :consume_phone_number, :readonly => true
           %br
@@ -22,7 +21,11 @@
             %p Enter area code to generate phone number for consuming SMS:
             = text_field_tag :area_code, params[:area_code], :size => 3
             = link_to "Generate", generate_consume_phone_number_path, :remote => true
-      %div.yui3-u-1-4
+      %div.yui3-u-1-3
+        = f.label :api_host, "API host:"
+        = f.text_field :api_host
+        %br
+        %br
         = link_to "Build menu option", account_menu_options_path(current_account)
         %br
         %br

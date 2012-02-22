@@ -4,10 +4,9 @@ class MenuOption < ActiveRecord::Base
   validates :name, :presence => true
   validates :format, :presence => true
   
-  attr_accessible :build_voice_response
-  
   def build_voice_response(digit)
     response_text = self.account.object_instances(name, format)
+    response_text = [response_text] unless response_text.kind_of? Array
     response = Twilio::TwiML::Response.new do |r|
       r.Say "You pressed, #{digit}, Geting latest information for #{name.pluralize}", :voice => 'woman'
       
