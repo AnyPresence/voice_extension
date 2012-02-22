@@ -6,7 +6,7 @@ class Account < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :consume_phone_number
   
-  NUM_ENTRIES = 1
+  NUM_ENTRIES = 2
   
   has_many :menu_options, :dependent => :destroy
   
@@ -41,8 +41,8 @@ class Account < ActiveRecord::Base
   end
   
   # Build an AnypresenceExtension client.
-  def ap_client(*api_version)
-    version = api_version.nil? ? self.api_version : 'latest'
+  def ap_client(*adhoc_api_version)
+    version = adhoc_api_version.empty? ? 'latest' : adhoc_api_version[0]
     @ap_client ||= AnypresenceExtension::Client.new(self.api_host, self.api_token, self.application_id, version)
   end
   

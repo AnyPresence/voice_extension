@@ -61,7 +61,7 @@ class VoiceController < ApplicationController
 
       # Check if we should provision this phone number, or if we own it already.
       if current_account.consume_phone_number.nil? && !consume_phone_number.nil?
-        # Check if we have a phone number available. 
+        # Check if we have a phone number available.
         if @twilio_wrapper.provision_new_phone_number?(consume_phone_number)
           begin
             # Let's buy this phone number.
@@ -72,6 +72,7 @@ class VoiceController < ApplicationController
         else
           # Use the phone number we already own but update the sms url.
           begin
+            Rails.logger.info "Updating voice_url for : " + consume_phone_number
             @twilio_wrapper.update_voice_url(consume_phone_number)
           rescue
             Rails.logger.error $!
@@ -109,19 +110,16 @@ class VoiceController < ApplicationController
     end
   end
   
+  # Voices object instance to the user via Twilio.
   def menu
     account = Account.where(:consume_phone_number => params[:To]).first
-    format = account.menu_options.where(:name => params[:object_name].downcase.strip)
-    response_text = account.object_instances(params[:object_name], format)
-    response = Twilio::TwiML::Response.new do |r|
-      r.Say "You pressed, #{params[:Digits]}, Geting latest information for #{params[:object_name]}", :voice => 'woman'
-      
-      r.Say "There is an #{params[:object_name]}: #{response_text}", :voice => 'woman'
-    end
+    menu_option = account.menu_options.where(:name => params[:object_name].downcase.strip).first
+    response = menu_option.build_voice_response(params[:Digits])
     
     render :text => response.text
   end
   
+  # Consumes voice call from Twilio and presents it with a menu.
   def consume
     account = Account.where(:consume_phone_number => params[:To]).first
     objects = account.object_definition_mappings

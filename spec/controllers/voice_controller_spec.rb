@@ -65,12 +65,27 @@ describe VoiceController do
       it "should know how to respond to key pressed by user" do
         account = Factory.create(:account, :consume_phone_number => "+16175443724")
         menu_option = Factory.create(:menu_option, :account => account)
-        Account.any_instance.stub(:object_instances).with("outage", [menu_option]).and_return("some stuff")
+        Account.any_instance.stub(:object_instances).with("outage", menu_option.format).and_return("some stuff")
         get :menu, :Digits => "1", :To => "+16175443724", :object_name => "outage"
         response.body.should include("outage")
       end
     end
     
+  end
+    
+  describe "settings" do
+    describe "update" do
+      it "should update existing twilio number if it's not used" do
+        @account = Factory.create(:account)
+        sign_in @account
+        
+        subject.current_account.consume_phone_number = nil
+        
+        TwilioVoiceWrapper::Voice.any_instance.stub(:provision_new_phone_number?).with("+16265138557").and_return(false)
+        TwilioVoiceWrapper::Voice.any_instance.should_receive(:update_voice_url)
+        put :settings, :account => {:consume_phone_number => "+16265138557"}
+      end
+    end
   end
 
 

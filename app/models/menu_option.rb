@@ -4,6 +4,18 @@ class MenuOption < ActiveRecord::Base
   validates :name, :presence => true
   validates :format, :presence => true
   
+  attr_accessible :build_voice_response
+  
+  def build_voice_response(digit)
+    response_text = self.account.object_instances(name, format)
+    response = Twilio::TwiML::Response.new do |r|
+      r.Say "You pressed, #{digit}, Geting latest information for #{name.pluralize}", :voice => 'woman'
+      
+      r.Say "There is an #{name}: #{response_text}", :voice => 'woman'
+    end
+    response
+  end
+  
   def self.build_menu_option(objects)
     options = {}
     options["1"] = ["menu",""]
@@ -21,7 +33,7 @@ class MenuOption < ActiveRecord::Base
       r.Say "Hello, Welcome to Anypresence's voice system:", :voice => 'woman'
       # List out available object definitions
       options.values.each do |v|
-        r.Say v[1], :voice => 'woman'
+        r.Say v[1].pluralize, :voice => 'woman'
       end
       
       options.keys.each do |k|
