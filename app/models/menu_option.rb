@@ -11,7 +11,10 @@ class MenuOption < ActiveRecord::Base
     response = Twilio::TwiML::Response.new do |r|
       r.Say "You pressed, #{digit}, Geting latest information for #{name.pluralize}", :voice => 'woman'
       
-      r.Say "There is an #{name}: #{response_text}", :voice => 'woman'
+      r.Say "There is an #{name}:", :voice => 'woman'
+      response_text.each do |t|
+        r.Say "#{t}", :voice => 'woman'
+      end
     end
     response
   end
