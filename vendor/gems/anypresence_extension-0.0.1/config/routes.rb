@@ -7,9 +7,9 @@ AnypresenceExtension::Engine.routes.draw do
 
   root :to => 'settings#unauthorized'
   
-  devise_for :accounts, {
-    class_name: 'AnypresenceExtension::Account',
-    module: :devise
-  }
+  #devise_for :accounts, {
+  #  class_name: 'AnypresenceExtension::Account',
+  #  module: :devise
+  #}
 
 end
