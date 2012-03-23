@@ -33,7 +33,6 @@ InstalledFiles
 certificates/*
 .bundle.tddium*
 .tddium
-vendor/gems/**/*
 
 # ignore the mongoid folder
 mongoid
