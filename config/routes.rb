@@ -1,6 +1,4 @@
 VoiceExtension::Application.routes.draw do
-  devise_for :accounts
-
   post 'provision' => 'voice#provision'
   post 'deprovision' => 'voice#deprovision'
   post 'voice' => 'voice#voice'
