@@ -39,6 +39,7 @@ class MenuOption < ActiveRecord::Base
       end
       
       options.keys.each do |k|
+        Rails.logger.info "Adding object #{options[k][0]} to gather with digit #{k.to_i}..."
         r.Gather(:action => url + "/menu?object_name=#{options[k][0]}", :numDigits => k.to_i) do
         end
       end
