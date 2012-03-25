@@ -20,6 +20,7 @@ class MenuOption < ActiveRecord::Base
   
   def self.build_menu_option(objects)
     options = {}
+    objects = objects.reverse
     options["1"] = ["menu",""]
     
     objects.each_with_index do |option, index|
