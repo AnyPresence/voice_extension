@@ -7,16 +7,29 @@ require "voice_extension/version"
 Gem::Specification.new do |s|
   s.name        = "voice_extension"
   s.version     = VoiceExtension::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of VoiceExtension."
-  s.description = "TODO: Description of VoiceExtension."
+  s.authors     = ["Anypresence"]
+  s.email       = ["fake@fake.local"]
+  s.homepage    = ""
+  s.summary     = ""
+  s.description = ""
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
 
-  s.add_dependency "rails", "~> 3.2.3"
-  # s.add_dependency "jquery-rails"
-
-  s.add_development_dependency "sqlite3"
+  s.add_dependency "rails", "~> 3.2.2"
+  s.add_development_dependency "json"
+  s.add_development_dependency "multi_json"
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "rspec-rails"
+  s.add_development_dependency "mongoid", "2.4.4"
+  s.add_development_dependency "liquid"
+  s.add_development_dependency "local-env"
+  s.add_development_dependency "faraday"
+  s.add_development_dependency "database_cleaner"
+  s.add_development_dependency "haml"
+  s.add_development_dependency "dynamic_form"
+  s.add_development_dependency "simple_form"
+  s.add_development_dependency "factory_girl"
+  s.add_development_dependency "webmock"
+  s.add_development_dependency "vcr"
+  s.add_development_dependency "ruby-debug19"
 end
