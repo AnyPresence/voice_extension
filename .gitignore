@@ -9,6 +9,7 @@ public/system/*
 coverage/
 config/heroku.yml
 config/local-env.yml
+spec/dummy/config/local-env.yml
 .DS_Store
 *.tmproj
 tmtags
@@ -25,7 +26,6 @@ test/tmp
 test/version_tmp
 tmp
 pkg
-*.gem
 lib/bundler/man
 spec/reports
 .config
@@ -33,6 +33,9 @@ InstalledFiles
 certificates/*
 .bundle.tddium*
 .tddium
+spec/dummy/log/*
+bin/*
+
 
 # ignore the mongoid folder
 mongoid
