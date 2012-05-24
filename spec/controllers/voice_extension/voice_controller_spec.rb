@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe VoiceController do
+describe VoiceExtension::VoiceController do
   def generate_secure_parameters
     timestamp = Time.now.to_i
     app_id = @account.application_id
