@@ -1,14 +1,10 @@
-class Account < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :token_authenticatable, :rememberable, :trackable
+class Account
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :consume_phone_number, :api_host
 
   NUM_ENTRIES = 2
-  
-  has_many :menu_options, :dependent => :destroy
+
   
   class << self
     def find_by_consume_phone_number(phone_number)

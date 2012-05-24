@@ -1,4 +1,4 @@
-class MenuOption < ActiveRecord::Base
+class MenuOption
   belongs_to :account
   
   validates :name, :presence => true

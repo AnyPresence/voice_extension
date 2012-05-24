@@ -1,0 +1,11 @@
+development:
+  host: localhost
+  database: voice_extension_development
+
+test:
+  host: localhost
+  database: voice_extension_test
+
+production:
+  host: localhost
+  database: voice_extension_production

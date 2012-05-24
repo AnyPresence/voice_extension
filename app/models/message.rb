@@ -1,4 +1,4 @@
-class Message < ActiveRecord::Base
+class Message
   
   # Strips the phone number prefix such as +1 from +16172345678.
   # Twilio does not currently support toll-free number texting; and texting internationally is in beta.
