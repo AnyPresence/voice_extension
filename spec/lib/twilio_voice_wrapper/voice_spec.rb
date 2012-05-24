@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TwilioVoiceWrapper::Voice do
+describe VoiceExtension::TwilioVoiceWrapper::Voice do
   def setup_twilio
      twilio_client = double('twilio_client')
      Twilio::REST::Client.should_receive(:new).with(any_args()).and_return(twilio_client)

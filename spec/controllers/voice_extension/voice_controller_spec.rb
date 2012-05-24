@@ -81,8 +81,8 @@ describe VoiceExtension::VoiceController do
         
         subject.current_account.consume_phone_number = nil
         
-        TwilioVoiceWrapper::Voice.any_instance.stub(:provision_new_phone_number?).with("+16265138557").and_return(false)
-        TwilioVoiceWrapper::Voice.any_instance.should_receive(:update_voice_url)
+        ::VoiceExtension::TwilioVoiceWrapper::Voice.any_instance.stub(:provision_new_phone_number?).with("+16265138557").and_return(false)
+        ::VoiceExtension::TwilioVoiceWrapper::Voice.any_instance.should_receive(:update_voice_url)
         put :settings, :account => {:consume_phone_number => "+16265138557"}
       end
     end

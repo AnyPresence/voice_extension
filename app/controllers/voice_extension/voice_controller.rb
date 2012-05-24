@@ -167,7 +167,7 @@ module VoiceExtension
 
     # A request is valid if it is both recent and was properly signed with our shared secret.
     def valid_request?
-      signed_secret = TwilioVoiceWrapper::sign_secret(ENV['SHARED_SECRET'], params[:application_id], params[:timestamp])
+      signed_secret = ::VoiceExtension::TwilioVoiceWrapper::sign_secret(ENV['SHARED_SECRET'], params[:application_id], params[:timestamp])
       recent_request? && params[:anypresence_auth] == signed_secret[:anypresence_auth]
     end
 
@@ -201,7 +201,7 @@ module VoiceExtension
 
     # Builds the +Consumer+ which accesses Twilio.
     def build_twilio_wrapper
-      @twilio_wrapper = TwilioVoiceWrapper::Voice.new(current_account.id)
+      @twilio_wrapper = ::VoiceExtension::TwilioVoiceWrapper::Voice.new(current_account.id)
     end
   end
 end

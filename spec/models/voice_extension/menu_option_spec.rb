@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MenuOption do
+describe VoiceExtension::MenuOption do
   
   describe "build voice menu" do
     it "should pluralize objects" do
