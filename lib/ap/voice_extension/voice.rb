@@ -5,11 +5,11 @@ module AP
         raise "Nothing to configure!"
       end
       account = nil
-      if !::EmailExtension::Account.all.blank?
-        account = ::EmailExtension::Account.first
+      if !::VoiceExtension::Account.all.blank?
+        account = ::VoiceExtension::Account.first
         account.update_attributes(config)
       else
-        account = ::EmailExtension::Account.new(config)
+        account = ::VoiceExtension::Account.new(config)
         account.save!
       end
 
