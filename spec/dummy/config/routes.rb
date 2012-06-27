@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-
   resources :outages
-
-  mount VoiceExtension::Engine => "/voice_extension"
+  
+  mount VoiceExtension::Engine => "/voice-extension"
 end

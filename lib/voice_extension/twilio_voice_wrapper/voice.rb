@@ -15,7 +15,7 @@ module VoiceExtension
       end
     
       def twilio_account
-        @twilio_account ||= Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']).account 
+        @twilio_account ||= Twilio::REST::Client.new(ENV['VOICE_EXTENSION_TWILIO_ACCOUNT_SID'], ENV['VOICE_EXTENSION_TWILIO_AUTH_TOKEN']).account 
       end
     
       # Provisions new phone number with Twilio.
@@ -57,7 +57,7 @@ module VoiceExtension
           sid = x.sid if x.phone_number.match(Message::strip_phone_number_prefix(phone_number))
         end
       
-        twilio_account.incoming_phone_numbers.get(sid).update({:voice_url => ENV['VOICE_CONSUME_URL']})
+        twilio_account.incoming_phone_numbers.get(sid).update({:voice_url => ENV['VOICE_EXTENSION_VOICE_CONSUME_URL']})
       end
     
       def find_available_purchased_phone_number(used_numbers)    

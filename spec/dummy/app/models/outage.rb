@@ -1,7 +1,7 @@
 class Outage
   include Mongoid::Document
   include Mongoid::Timestamps
-  include AP::SmsExtension::Sms
+  include AP::VoiceExtension
   
   # Field definitions
   

@@ -161,4 +161,10 @@ describe OutagesController do
     end
   end
 
+  describe "consume" do
+    it "show menu items" do 
+      post :consume
+    end
+  end
+
 end

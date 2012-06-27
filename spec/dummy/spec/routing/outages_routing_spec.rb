@@ -30,6 +30,9 @@ describe OutagesController do
     it "routes to #destroy" do
       delete("/outages/1").should route_to("outages#destroy", :id => "1")
     end
-
+    
+    it "routes to #consume" do
+      get("/voice-extension/consume").should route_to("voice-extension/voice#consume")
+    end
   end
 end

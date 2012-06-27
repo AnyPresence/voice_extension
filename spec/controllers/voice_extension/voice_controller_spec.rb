@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe VoiceExtension::VoiceController do
+describe ::VoiceController do
   def generate_secure_parameters
     timestamp = Time.now.to_i
     app_id = @account.application_id
@@ -9,12 +9,12 @@ describe VoiceExtension::VoiceController do
   
   describe "setup" do
     before(:each) do
-      @account = Factory.build(:account)
+      @account = FactoryGirl.build(:account)
     end
     
     describe 'provision' do
       it "should update old account that exists already" do
-        @account0 = Factory.create(:account)
+        @account0 = FactoryGirl.create(:account)
         sign_in @account0
         Account.where(:application_id => @account0.application_id).size.should == 1
         
@@ -63,8 +63,8 @@ describe VoiceExtension::VoiceController do
 
     describe "consume voice" do
       it "should know how to respond to key pressed by user" do
-        account = Factory.create(:account, :consume_phone_number => "+16175443724")
-        menu_option = Factory.create(:menu_option, :account => account)
+        account = FactoryGirl.create(:account, :consume_phone_number => "+16175443724")
+        menu_option = FactoryGirl.create(:menu_option, :account => account)
         Account.any_instance.stub(:object_instances).with("outage", menu_option.format).and_return("some stuff")
         get :menu, :Digits => "1", :To => "+16175443724", :object_name => "outage"
         response.body.should include("outage")
@@ -76,7 +76,7 @@ describe VoiceExtension::VoiceController do
   describe "settings" do
     describe "update" do
       it "should update existing twilio number if it's not used" do
-        @account = Factory.create(:account)
+        @account = FactoryGirl.create(:account)
         sign_in @account
         
         subject.current_account.consume_phone_number = nil
