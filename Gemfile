@@ -5,16 +5,27 @@ source "http://rubygems.org"
 # development dependencies will be added by default to the :development group.
 gemspec
 
-# jquery-rails is used by the dummy application
 gem "jquery-rails"
+gem 'mongoid', '~> 3.0.6'
+gem "resque"
+gem "redis"
+gem 'haml', '3.1.7'
+gem 'coffee-rails', '~> 3.2.1'
+gem 'jquery_mobile_rails', '1.2.0'
+gem 'simple_form', '2.0.4'
+gem 'sass-rails', '3.2.5'
+gem 'compass-rails', '1.0.3'
+gem 'actionpack'
 
-gem 'rspec-rails'
-gem "mongoid", "2.4.4"
-gem 'mongo', '= 1.3.1' 
-gem 'bson', '= 1.3.1' 
-gem 'bson_ext', '= 1.3.1'
+group :test do
+  gem 'mocha', :require => false
+  gem "shoulda"
+end
 
-gem "jquery-rails"
+group :assets do
+  gem 'therubyracer'
+  gem 'uglifier'
+end
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or
@@ -22,4 +33,4 @@ gem "jquery-rails"
 # your gem to rubygems.org.
 
 # To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+gem 'debugger'

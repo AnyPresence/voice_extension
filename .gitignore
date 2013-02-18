@@ -34,6 +34,7 @@ certificates/*
 .bundle.tddium*
 .tddium
 spec/dummy/log/*
+spec/dummy/config/local-env.yml
 bin/*
 
 
