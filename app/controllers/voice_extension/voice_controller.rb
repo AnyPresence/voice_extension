@@ -1,4 +1,4 @@
-#module VoiceExtension
+module VoiceExtension
   class VoiceController < ApplicationController
     # We can do SSO from the hash AnyPresence sends
     # before_filter :authenticate_from_anypresence, :only => [:deprovision, :settings, :publish]
@@ -45,4 +45,4 @@
       @twilio_wrapper = ::VoiceExtension::TwilioVoiceWrapper::Voice.new(current_account.id)
     end
   end
-#end
+end

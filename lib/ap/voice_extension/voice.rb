@@ -1,10 +1,14 @@
+require 'singleton'
+
 module AP
   module VoiceExtension
     module Voice
       def self.config_account(config={})
-        if config.empty?
-          raise "Nothing to configure!"
-        end
+        twilio_account_sid = ENV['SMS_EXTENSION_TWILIO_ACCOUNT_SID']
+        twilio_account_sid = ENV['AP_SMS_NOTIFIER_TWILIO_ACCOUNT_SID']
+      
+        Config.instance.configuration ||= HashWithIndifferentAccess.new
+        
         account = nil
         if !::VoiceExtension::Account.all.blank?
           account = ::VoiceExtension::Account.first
@@ -23,6 +27,12 @@ module AP
         end
         
       end
+
+      class Config
+        include Singleton
+        attr_accessor :configuration
+      end
+      
     end
   end
 end

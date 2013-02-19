@@ -1,11 +1,42 @@
 development:
-  host: localhost
-  database: voice_extension_development
-
+  # Configure available database sessions. (required)
+  sessions:
+    # Defines the default session. (required)
+    default:
+      # Defines the name of the default database that Mongoid can connect to.
+      # (required).
+      database: voice_extension_development
+      # Provides the hosts the default session can connect to. Must be an array
+      # of host:port pairs. (required)
+      hosts:
+        - localhost:27017
+      options:
+        consistency: :strong
+  # Configure Mongoid specific options. (optional)
+  options:
 test:
-  host: localhost
-  database: voice_extension_test
-
+  sessions:
+    default:
+      database: voice_extension_test
+      hosts:
+        - localhost:27017
+      options:
+        consistency: :strong
+        raise_not_found_error: true
 production:
-  host: localhost
-  database: voice_extension_production
+  # Configure available database sessions. (required)
+  sessions:
+    # Defines the default session. (required)
+    default:
+      # Defines the name of the default database that Mongoid can connect to.
+      # (required).
+      database: voice_extension_production
+      # Provides the hosts the default session can connect to. Must be an array
+      # of host:port pairs. (required)
+      hosts:
+        - localhost:27017
+      options:
+        consistency: :strong
+  # Configure Mongoid specific options. (optional)
+  options:
+    raise_not_found_error: true

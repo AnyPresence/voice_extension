@@ -1,0 +1,48 @@
+@import "compass"
+@import "bootstrap"
+@import "bootstrap-responsive"
+@import "font-awesome"
+
+
+// =general
+.ap-mono
+  font-family: Menlo, Monaco, "Courier New", monospace
+.ap-text-left, .table .ap-text-left
+  text-align: left
+.ap-text-right, .table .ap-text-right
+  text-align: right
+.ap-text-center, .table .ap-text-center
+  text-align: center
+
+
+// =form
+.form-devise
+  max-width: 350px
+  margin: rhythm() auto
+  border: 1px solid $grayLighter
+  +border-radius($inputBorderRadius)
+  legend
+    margin: 0
+    padding: 0
+    border: 0
+  [type="email"], [type="password"]
+    height: auto
+    padding: rhythm(0.25)
+    +adjust-font-size-to(16px, 1, 14px)
+.form-content
+  +legacy-pie-clearfix
+  padding: rhythm()
+.form-footer
+  +legacy-pie-clearfix
+  padding: rhythm(0.5)
+  background: $grayLighter
+
+
+// =bootstrap
+// fixes a problem with tab styles
+.tabbable
+  .tab-content
+    width: auto
+.table
+  th, td
+    vertical-align: middle

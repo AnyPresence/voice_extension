@@ -1,4 +1,4 @@
-module VoiceExtension
-  class ApplicationController < ActionController::Base
-  end
+class VoiceExtension::ApplicationController < ApplicationController
+  layout "layouts/admin"
+  
 end

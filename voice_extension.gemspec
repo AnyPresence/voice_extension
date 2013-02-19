@@ -22,11 +22,13 @@ Gem::Specification.new do |s|
   s.add_dependency "liquid"
   s.add_dependency "local-env"
   s.add_dependency "faraday"
+  s.add_dependency "twilio-ruby"
 
   s.add_development_dependency "factory_girl", "= 3.3.0"
   s.add_development_dependency "webmock"
   s.add_development_dependency "vcr"
+  s.add_development_dependency "rspec-rails"
   s.add_development_dependency "debugger"
   s.add_development_dependency "rspec"
-  s.add_development_dependency "database_cleaner"
+  s.add_development_dependency "database_cleaner", '0.8.0'
 end

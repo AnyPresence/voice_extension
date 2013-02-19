@@ -22,7 +22,6 @@ RSpec.configure do |config|
   # Gives you 'use_vcr_cassette' as a macro
   config.extend VCR::RSpec::Macros
   
-
   config.before(:suite) do
     DatabaseCleaner[:mongoid].clean_with(:truncation)
   end
