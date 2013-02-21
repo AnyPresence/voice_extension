@@ -7,7 +7,8 @@ module VoiceExtension
     
     belongs_to :page, class_name: "VoiceExtension::Page", inverse_of: :menu_options
     
-    validates :keyed_value, :name, :format, :presence => true
+    validates :keyed_value, :format, presence: true
+    validates :keyed_value, uniqueness: {scope: :page}
     
     field :keyed_value, type: String
     field :name, type: String

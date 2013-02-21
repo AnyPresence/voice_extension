@@ -1,6 +1,19 @@
 = javascript_include_tag "voice_extension/application"
 
-= link_to "Go back to settings", settings_path
+%ul.breadcrumb
+  %li
+    = link_to 'Home', main_app.admin_root_path
+    %span.divider /
+  %li
+    = link_to 'Extensions', main_app.admin_extensions_path
+    %span.divider /
+  %li 
+    = link_to 'Voice Extension', settings_path
+    %span.divider /
+  %li
+    = link_to "#{@page.name}", @page
+    %span.divider /
+    
 %br
 %br
 #menu_option

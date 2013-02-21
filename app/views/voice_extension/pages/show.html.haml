@@ -1,8 +1,15 @@
 = javascript_include_tag "voice_extension/application"
 
-= link_to "Go back to settings", settings_path
-%br
-%br
+%ul.breadcrumb
+  %li
+    = link_to 'Home', main_app.admin_root_path
+    %span.divider /
+  %li
+    = link_to 'Extensions', main_app.admin_extensions_path
+    %span.divider /
+  %li 
+    = link_to 'Voice Extension', settings_path
+    %span.divider /
 
 = link_to new_page_menu_option_path([@page, @menu_option]), class: 'btn btn-medium btn-primary' do
   Add menu option

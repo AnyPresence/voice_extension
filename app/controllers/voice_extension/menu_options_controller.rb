@@ -4,6 +4,7 @@ module VoiceExtension
   class MenuOptionsController < ApplicationController
     before_filter :authenticate_admin!
     before_filter :get_page, only: [:edit, :update, :new, :create]
+    before_filter :get_main_app_models, only: [:edit, :new]
     
     def index
       @menu_options = VoiceExtension::MenuOption.all
@@ -21,12 +22,13 @@ module VoiceExtension
     
     def update
       @menu_option = VoiceExtension::MenuOption.find(params[:id])
-
+      @pages = VoiceExtension::Page.all
+      
       respond_to do |format|
         if @menu_option.update_attributes(params[:menu_option])
           if !params[:forward_page_transition].blank?
             forward_page_transition = VoiceExtension::Page.find(params[:forward_page_transition])
-            @menu_option.update_attributes(forward_page: forward_page_transition) if !forward_page_transition.blank?
+            @menu_option.update_attributes(forward_page: forward_page_transition) if !forward_page_transition.blank? && @menu_option.forward_page != forward_page_transition
           end
           format.html { redirect_to page_path(@page), notice: 'Menu Option was successfully updated.' }
           format.json { head :no_content }
@@ -84,6 +86,19 @@ module VoiceExtension
   protected
     def get_page
       @page = VoiceExtension::Page.find(params[:page_id])
+    end
+    
+    def get_main_app_models
+      @available_object_definitions = "#{::AP::VoiceExtension::Voice::Config.instance.latest_version.upcase}".constantize.constants
+      if @available_object_definitions.blank?
+        version = ::AP::VoiceExtension::Voice::Config.instance.latest_version
+        Dir.glob(Rails.root.join("app", "models", version, "*.rb")).each do |f|
+          "::#{version.upcase}::#{File.basename(f, '.*').camelize}".constantize.name 
+        end
+
+        @available_object_definitions = "#{::AP::VoiceExtension::Voice::Config.instance.latest_version.upcase}".constantize.constants
+      end
+      @available_object_definitions.delete(:Custom)
     end
   end
 end
