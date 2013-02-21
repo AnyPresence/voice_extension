@@ -1,5 +1,5 @@
 VoiceExtension::Engine.routes.draw do
-  match 'consume' => 'voice#consume'
+  post 'consume' => 'voice#consume'
   get 'settings' => 'pages#index'
   
   resources :pages do

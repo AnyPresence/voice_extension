@@ -21,12 +21,13 @@ module VoiceExtension
     
     def update
       @menu_option = VoiceExtension::MenuOption.find(params[:id])
-      @forward_page_transition = VoiceExtension::Page.find(params[:forward_page_transition])
-      @menu_option.forward_page = @forward_page_transition
-      @menu_option.save
-      
+
       respond_to do |format|
         if @menu_option.update_attributes(params[:menu_option])
+          if !params[:forward_page_transition].blank?
+            forward_page_transition = VoiceExtension::Page.find(params[:forward_page_transition])
+            @menu_option.update_attributes(forward_page: forward_page_transition) if !forward_page_transition.blank?
+          end
           format.html { redirect_to page_path(@page), notice: 'Menu Option was successfully updated.' }
           format.json { head :no_content }
         else

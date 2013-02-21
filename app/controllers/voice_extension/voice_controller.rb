@@ -1,16 +1,10 @@
 module VoiceExtension
   class VoiceController < ApplicationController
-    # We can do SSO from the hash AnyPresence sends
-    # before_filter :authenticate_from_anypresence, :only => [:deprovision, :settings, :publish]
-  
-    # Normal Devise authentication logic
-    #before_filter :authenticate_account!, :except => [:unauthorized, :provision, :consume, :menu]
-    #before_filter :find_api_version, :only => [:provision, :publish]
+    # This controller interfaces with Twilio
+
     before_filter :build_twilio_wrapper, :only => [:settings, :make_call, :generate_consume_phone_number]
-  
-    def voice
-    end
-  
+    
+    def voice; end
   
     # Voices object instance to the user via Twilio.
     def menu
@@ -23,17 +17,31 @@ module VoiceExtension
   
     # Consumes voice call from Twilio and presents it with a menu.
     def consume
-      account = Account.where(:consume_phone_number => params[:To]).first
-      objects = account.object_definition_mappings
-      Rails.logger.info "objects: " + objects.inspect
+      consume_phone_number = params[:To]
+      
+      Rails.logger.info "Current page is: #{params[:current_page]}"
+      
+      # Check what was pressed.
+      if params[:Digits].blank?
+        # Show main menu
+        response = VoiceExtension::MenuOption::build_menu_option
+      else
+        begin
+          page = VoiceExtension::Page.where(name: params[:current_page]).first
+          response = VoiceExtension::MenuOption::build_menu_option(params[:Digits].to_s, page)
+        rescue
+          Rails.logger.error "Unable to generate menu: #{$!.message}"
+          Rails.logger.error $!.backtrace.join("\n")
+          response = Twilio::TwiML::Response.new do |r|
+            r.Say VoiceExtension::MenuOption::GENERIC_ERROR_MESSAGE_TO_VOICE, :voice => 'woman'
+          end
+        end
+      end
     
       begin
-        response = MenuOption::build_menu_option objects
-      
         render :text => response.text
       rescue
         Rails.logger.error $!.message
-        render :text => 'Error!'
       end
     end
 

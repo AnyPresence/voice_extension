@@ -23,10 +23,14 @@
   %thead
     %tr
       %th Name
+      %th Root
   %tbody
     - @pages.each do |page|
       %tr
         %td= link_to "#{page.name}", page
+        %td
+          - if page.root
+            = check_box_tag "root", "yes", true, {disabled: true}
         %td 
           = link_to "Edit", page
           = link_to "Delete", page, method: :delete, data: { confirm: 'Are you sure?' }

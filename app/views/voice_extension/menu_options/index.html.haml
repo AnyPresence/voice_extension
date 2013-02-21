@@ -17,11 +17,13 @@
 %table.table.table-striped
   %thead
     %tr
+      %th Key
       %th Name
       %th Format
   %tbody
     - @menu_options.each do |option|
       %tr
+        %td= "#{option.keyed_value}"
         %td= "#{option.name}"
         %td= "#{option.format}"
         %td 

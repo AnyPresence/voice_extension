@@ -23,6 +23,7 @@ gem 'compass-recipes', '0.3.0'
 gem 'font-awesome-rails', '3.0.2'
 gem 'rspec-rails'
 gem 'twilio-ruby'
+gem 'local-env'
 
 group :test do
   gem 'mocha', :require => false

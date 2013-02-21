@@ -2,9 +2,10 @@ require_dependency "voice_extension/application_controller"
 
 module VoiceExtension
   class PagesController < ApplicationController
+    before_filter :authenticate_admin!
     
     def index
-      @pages = VoiceExtension::Page.all
+      @pages = VoiceExtension::Page.order_by("root DESC").all
     end
     
     def new
@@ -18,8 +19,7 @@ module VoiceExtension
     
     def show
       @page = VoiceExtension::Page.find(params[:id])
-      
-      #@menu_option = VoiceExtension::MenuOption.new
+      @menu_options = @page.menu_options.order_by("keyed_value ASC")
       
       respond_to do |format|
         format.html # show.html.erb

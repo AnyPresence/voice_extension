@@ -234,6 +234,7 @@ DEPENDENCIES
   haml (= 3.1.7)
   jquery-rails
   jquery_mobile_rails (= 1.2.0)
+  local-env
   mocha
   mongoid (~> 3.0.6)
   redis

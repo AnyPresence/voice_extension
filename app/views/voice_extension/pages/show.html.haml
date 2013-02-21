@@ -6,18 +6,19 @@
 
 = link_to new_page_menu_option_path([@page, @menu_option]), class: 'btn btn-medium btn-primary' do
   Add menu option
-  %i.icon-circle-arrow-right
   
 %table.table.table-striped
   %thead
     %tr
+      %th Key
       %th Name
       %th Format
       %th Page transition
       %th Action
   %tbody
-    = @page.menu_options.each do |option|
+    = @menu_options.each do |option|
       %tr
+        %td= option.keyed_value
         %td= option.name
         %td= option.format
         %td

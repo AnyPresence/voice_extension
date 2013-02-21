@@ -3,62 +3,66 @@ module VoiceExtension
     include Mongoid::Document
     include Mongoid::Timestamps
     
-    belongs_to :page, class_name: "VoiceExtension::Page", inverse_of: :menu_options
-  
-    validates :name, :presence => true
-    validates :format, :presence => true
+    GENERIC_ERROR_MESSAGE_TO_VOICE = "Sorry, we're unable to process the request at this time."
     
+    belongs_to :page, class_name: "VoiceExtension::Page", inverse_of: :menu_options
+    
+    validates :keyed_value, :name, :format, :presence => true
+    
+    field :keyed_value, type: String
     field :name, type: String
     field :format, type: String
     
     # A menu option has one forward page transition
     has_one :forward_page, class_name: "VoiceExtension::Page", inverse_of: :from_menu_option
   
-    # Builds a response depending on what is pressed.
-    def build_voice_response(digit)
-      #response_text = self.account.object_instances(name, format)
-      response_text = [response_text] unless response_text.kind_of? Array
-      response = Twilio::TwiML::Response.new do |r|
-        r.Say "You pressed, #{digit}, Geting latest information for #{name.pluralize}", :voice => 'woman'
-      
-        r.Say "There is an #{name}:", :voice => 'woman'
-        response_text.each do |t|
-          r.Say "#{t}", :voice => 'woman'
-        end
-      end
-      response
-    end
-  
-    def self.build_menu_option(objects)
-      options = {}
-      objects = objects.reverse
-      options["1"] = ["menu",""]
-    
-      objects.each_with_index do |option, index|
-        i = index+1
-        options[i.to_s] = [option, "Press, #{i}, for, #{option.underscore.humanize}"]
-      end
-  
+    # Builds the menu option to be read of to the caller.
+    #
+    # Params:
+    # +pressed_value+ is the pressed key value. If there's key press, speak out
+    #   the main menu.
+    # +page+ is the page which displayed the options that resulted in this key press.
+    def self.build_menu_option(pressed_value=nil, page=nil)
       url = ENV['VOICE_CONSUME_URL']
-      match = url.match /^http(s?):\/\/.*?\//
-      url = match[0].gsub(/\/+$/,'') unless match.nil?
-    
-      response = Twilio::TwiML::Response.new do |r|
-        r.Say "Hello, Welcome to Anypresence's voice system:", :voice => 'woman'
-        # List out available object definitions
-        options.values.each do |v|
-          r.Say v[1].pluralize, :voice => 'woman'
-        end
+      # match = url.match /^http(s?):\/\/.*?\//
+      # url = match[0].gsub(/\/+$/,'') unless match.nil?
       
-        options.keys.each do |k|
-          Rails.logger.info "Adding object #{options[k][0]} to gather with digit #{k.to_i}..."
-          r.Gather(:action => url + "/menu?object_name=#{options[k][0]}", :numDigits => 1, :finishOnKey => k.to_s) do
+      response = nil
+      if pressed_value.blank?
+        response = Twilio::TwiML::Response.new do |r|
+          r.Say "Hello, Welcome to Anypresence's voice system:", :voice => 'woman'
+        
+          r.Say "Press the pound key after you are done keying in your selection.", :voice => 'woman'
+        
+          # Get root page
+          page = VoiceExtension::Page.root_page.first
+          page.menu_options.order_by('keyed_value ASC').each do |option|
+            r.Say "Press #{option.keyed_value} for #{option.format}", :voice => 'woman'
           end
-        end
+
+          r.Gather(:action => "#{url}?current_page=#{page.name}", :timeout => 5) 
     
-        # Finished
-        r.Say 'Goodbye!', :voice => 'woman'
-      end    
+          # Finished
+          r.Say 'Goodbye!', :voice => 'woman'
+        end    
+      else # We have a key press
+        response = Twilio::TwiML::Response.new do |r|
+          r.Say "You pressed: #{pressed_value}", :voice => 'woman'
+          
+          # Get page for key'ed value
+          menu_option = page.menu_options.where(keyed_value: pressed_value).first
+          if menu_option.blank? && menu_option.forward_page.blank?
+            Rails.logger.error "There's no page to transition to."
+            r.Say GENERIC_ERROR_MESSAGE_TO_VOICE, :voice => 'woman'
+          else
+            next_page = menu_option.forward_page
+            next_page.menu_options.order_by('keyed_value ASC').each do |option|
+              r.Say "Press #{option.keyed_value} for #{option.format}", :voice => 'woman'
+            end
+          end
+          
+        end
+      end
       response    
     end
   
