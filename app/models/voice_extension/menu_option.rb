@@ -16,6 +16,8 @@ module VoiceExtension
     
     # A menu option has one forward page transition
     has_one :forward_page, class_name: "VoiceExtension::Page", inverse_of: :from_menu_option
+    
+    belongs_to :object_definition, class_name: "VoiceExtension::ObjectDefinition", inverse_of: :menu_options
   
     # Builds the menu option to be read of to the caller.
     #
@@ -57,11 +59,13 @@ module VoiceExtension
             r.Say GENERIC_ERROR_MESSAGE_TO_VOICE, :voice => 'woman'
           else
             next_page = menu_option.forward_page
-            next_page.menu_options.order_by('keyed_value ASC').each do |option|
-              r.Say "Press #{option.keyed_value} for #{option.format}", :voice => 'woman'
-            end
+            if !next_page.menu_options.blank?
+              next_page.menu_options.order_by('keyed_value ASC').each do |option|
+                r.Say "Press #{option.keyed_value} for #{option.format}", :voice => 'woman'
+              end
             
-            r.Gather(:action => "#{url}?current_page=#{next_page.name}", :timeout => 5) 
+              r.Gather(:action => "#{url}?current_page=#{next_page.name}", :timeout => 5) 
+            end
           end
           
         end

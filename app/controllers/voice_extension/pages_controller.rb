@@ -38,10 +38,11 @@ module VoiceExtension
     def update
       @page = VoiceExtension::Page.find(params[:id])
       @page.root = params[:page][:root]
-      if @page.root_changed?
-        # Only one page should be marked as root
+      if @page.root_changed? && @page.root
+        # Only one page should be marked as root if this one is now root.
         VoiceExtension::Page.update_all(root: false)
       end
+      
       respond_to do |format|
         if @page.update_attributes(params[:page])
           format.html { redirect_to pages_path, notice: 'Page was successfully updated.' }

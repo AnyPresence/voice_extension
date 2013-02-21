@@ -30,6 +30,12 @@ module VoiceExtension
             forward_page_transition = VoiceExtension::Page.find(params[:forward_page_transition])
             @menu_option.update_attributes(forward_page: forward_page_transition) if !forward_page_transition.blank? && @menu_option.forward_page != forward_page_transition
           end
+          
+          if !params[:object_definition].blank?
+            object_definition = VoiceExtension::ObjectDefinition.find_or_create_by(name: params[:object_definition])
+            @menu_option.update_attributes(object_definition: object_definition)
+          end
+          
           format.html { redirect_to page_path(@page), notice: 'Menu Option was successfully updated.' }
           format.json { head :no_content }
         else
@@ -61,6 +67,11 @@ module VoiceExtension
     def create
       @menu_option = VoiceExtension::MenuOption.new(params[:menu_option])      
       @page.menu_options << @menu_option
+      
+      if !params[:object_definition].blank?
+        object_definition = VoiceExtension::ObjectDefinition.find_or_create_by(name: params[:object_definition])
+        @menu_option.object_definition = object_definition
+      end
       
       respond_to do |format|
         if @menu_option.save
