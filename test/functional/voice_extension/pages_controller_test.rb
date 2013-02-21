@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module VoiceExtension
-  class SettingsControllerTest < ActionController::TestCase
+  class PagesControllerTest < ActionController::TestCase
     # test "the truth" do
     #   assert true
     # end

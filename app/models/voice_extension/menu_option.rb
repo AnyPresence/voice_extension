@@ -3,13 +3,20 @@ module VoiceExtension
     include Mongoid::Document
     include Mongoid::Timestamps
     
-    belongs_to :account
+    belongs_to :page, class_name: "VoiceExtension::Page", inverse_of: :menu_options
   
     validates :name, :presence => true
     validates :format, :presence => true
+    
+    field :name, type: String
+    field :format, type: String
+    
+    # A menu option has one forward page transition
+    has_one :forward_page, class_name: "VoiceExtension::Page", inverse_of: :from_menu_option
   
+    # Builds a response depending on what is pressed.
     def build_voice_response(digit)
-      response_text = self.account.object_instances(name, format)
+      #response_text = self.account.object_instances(name, format)
       response_text = [response_text] unless response_text.kind_of? Array
       response = Twilio::TwiML::Response.new do |r|
         r.Say "You pressed, #{digit}, Geting latest information for #{name.pluralize}", :voice => 'woman'

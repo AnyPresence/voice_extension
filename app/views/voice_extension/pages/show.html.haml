@@ -1,0 +1,28 @@
+= javascript_include_tag "voice_extension/application"
+
+= link_to "Go back to settings", settings_path
+%br
+%br
+
+= link_to new_page_menu_option_path([@page, @menu_option]), class: 'btn btn-medium btn-primary' do
+  Add menu option
+  %i.icon-circle-arrow-right
+  
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Format
+      %th Page transition
+      %th Action
+  %tbody
+    = @page.menu_options.each do |option|
+      %tr
+        %td= option.name
+        %td= option.format
+        %td
+          - if !option.forward_page.blank?
+            = link_to "#{option.forward_page.name}", option.forward_page
+        %td
+          = link_to "Edit", edit_page_menu_option_path(@page, option)
+          = link_to "Delete", [@page, option], method: :delete, data: { confirm: 'Are you sure?' }

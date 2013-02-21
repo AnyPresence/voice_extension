@@ -1,0 +1,35 @@
+= javascript_include_tag "voice_extension/application"
+
+%ul.breadcrumb
+  %li
+    = link_to 'Home', main_app.admin_root_path
+    %span.divider /
+  %li
+    = link_to 'Extensions', main_app.admin_extensions_path
+    %span.divider /
+  %li.active Voice Extensions
+  
+.alert.alert-info
+  %h1 Voice Extensions
+  %p Manage voice extension settings.
+
+= link_to new_page_path, class: 'btn btn-medium btn-primary' do
+  Add Page
+  %i.icon-circle-arrow-right
+%br
+- if @pages.empty?
+  %p No page available...
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+  %tbody
+    - @pages.each do |page|
+      %tr
+        %td= link_to "#{page.name}", page
+        %td 
+          = link_to "Edit", page
+          = link_to "Delete", page, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+

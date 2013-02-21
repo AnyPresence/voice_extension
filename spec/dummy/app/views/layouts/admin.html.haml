@@ -7,5 +7,14 @@
     = csrf_meta_tags
     %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}
   %body
+    .header
+      .navbar.navbar-inverse
+        .navbar-inner
+          %a.btn.btn-navbar{data: {toggle: 'collapse', target: '.nav-collapse'}}
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          .brand
+            API v1
     .container
       = yield

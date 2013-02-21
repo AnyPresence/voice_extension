@@ -1,8 +1,31 @@
-= link_to "Go back to settings", settings_path
-%br
-%br
-- @menu_options.each do |option|
-  = link_to "#{option.name} - #{option.format}", [current_account, option]
+%ul.breadcrumb
+  %li
+    = link_to 'Home', main_app.admin_root_path
+    %span.divider /
+  %li
+    = link_to 'Extensions', main_app.admin_extensions_path
+    %span.divider /
+  %li.active Voice Extensions
+  
+.alert.alert-info
+  %h1 Voice Extensions
+  %p Manage voice extension settings.
+
+- if @menu_options.empty?
+  %p No menu available...
+  
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Format
+  %tbody
+    - @menu_options.each do |option|
+      %tr
+        %td= "#{option.name}"
+        %td= "#{option.format}"
+        %td 
+          = link_to "Edit", option
   %br
 %br
-= link_to "Add new menu option", new_account_menu_option_path(@account)
+= link_to "Add new menu option", new_menu_option_path

@@ -1,8 +1,10 @@
 VoiceExtension::Engine.routes.draw do
   match 'consume' => 'voice#consume'
-  get 'settings' => 'settings#index'
+  get 'settings' => 'pages#index'
   
-  resources :menu_options
+  resources :pages do
+    resources :menu_options
+  end
   
-  root :to => "settings#index"
+  root :to => "pages#index"
 end

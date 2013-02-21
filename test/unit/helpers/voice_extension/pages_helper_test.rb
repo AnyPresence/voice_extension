@@ -1,6 +1,6 @@
 require 'test_helper'
 
 module VoiceExtension
-  class SettingsHelperTest < ActionView::TestCase
+  class PagesHelperTest < ActionView::TestCase
   end
 end

@@ -1,10 +1,16 @@
-= simple_form_for [current_account, menu_option] do |f|
-  = f.error_messages
-  = f.label :name
-  = f.select :name, @available_objects, {}, {:class => 'select-menu'}
-  %br
-  
-  = f.label :format
-  = f.text_field :format
-  %br
-  = f.button :submit, "Submit!"
+= simple_form_for([@page, menu_option]) do |f|
+  .form-inputs
+    = f.error :base
+    = f.error_notification
+    = f.input :name
+    = f.input :format
+    = f.label "Pick a page to transition to:"
+    - @pages.each do |page|
+      = label_tag '', class: 'radio' do
+        - if !menu_option.forward_page.blank? && (page == menu_option.forward_page)
+          = radio_button_tag "forward_page_transition", page.id.to_s, true
+        - else
+          = radio_button_tag "forward_page_transition", page.id.to_s, false
+        = page.name.to_s
+  .form-actions
+    = f.button :submit, {class: 'btn btn-primary'}

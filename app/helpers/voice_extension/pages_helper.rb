@@ -1,4 +1,4 @@
 module VoiceExtension
-  module SettingsHelper
+  module PagesHelper
   end
 end
