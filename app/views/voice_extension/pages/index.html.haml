@@ -32,7 +32,7 @@
           - if page.root
             = check_box_tag "root", "yes", true, {disabled: true}
         %td 
-          = link_to "Edit", page
+          = link_to "Edit", edit_page_path(page)
           = link_to "Delete", page, method: :delete, data: { confirm: 'Are you sure?' }
 
 %br

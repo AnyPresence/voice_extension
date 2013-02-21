@@ -27,6 +27,32 @@ module VoiceExtension
       end
     end
     
+    def edit
+      @page = VoiceExtension::Page.find(params[:id])
+      respond_to do |format|
+        format.html # edit.html.erb
+        format.json { render json: @page }
+      end
+    end
+    
+    def update
+      @page = VoiceExtension::Page.find(params[:id])
+      @page.root = params[:page][:root]
+      if @page.root_changed?
+        # Only one page should be marked as root
+        VoiceExtension::Page.update_all(root: false)
+      end
+      respond_to do |format|
+        if @page.update_attributes(params[:page])
+          format.html { redirect_to pages_path, notice: 'Page was successfully updated.' }
+          format.json { head :no_content }
+        else
+          format.html { render action: "edit" }
+          format.json { render json: @page.errors, status: :unprocessable_entity }
+        end
+      end
+    end
+    
     def create
       @page = VoiceExtension::Page.new(params[:page])
 
