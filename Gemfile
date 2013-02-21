@@ -28,6 +28,7 @@ gem 'local-env'
 group :test do
   gem 'mocha', :require => false
   gem "shoulda"
+  gem 'shoulda-matchers', :require => false
 end
 
 group :assets do

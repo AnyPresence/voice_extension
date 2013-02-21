@@ -59,6 +59,8 @@ module VoiceExtension
             next_page.menu_options.order_by('keyed_value ASC').each do |option|
               r.Say "Press #{option.keyed_value} for #{option.format}", :voice => 'woman'
             end
+            
+            r.Gather(:action => "#{url}?current_page=#{next_page.name}", :timeout => 5) 
           end
           
         end

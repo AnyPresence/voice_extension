@@ -3,10 +3,9 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../spec/dummy/config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
-require 'vcr'
 require 'database_cleaner'
 require 'voice_extension'
-
+require 'shoulda/matchers'
 require 'factory_girl'
 
 FactoryGirl.find_definitions
@@ -19,9 +18,6 @@ Dir[Rails.root.join("spec/lib/**/*.rb")].each {|f| require f}
 RSpec.configure do |config|
   config.mock_with :rspec
     
-  # Gives you 'use_vcr_cassette' as a macro
-  config.extend VCR::RSpec::Macros
-  
   config.before(:suite) do
     DatabaseCleaner[:mongoid].clean_with(:truncation)
   end

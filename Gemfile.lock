@@ -211,7 +211,6 @@ GEM
     uglifier (1.3.0)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
-    vcr (2.1.1)
     vegas (0.1.11)
       rack (>= 1.0.0)
     webmock (1.8.7)
@@ -243,10 +242,10 @@ DEPENDENCIES
   rspec-rails
   sass-rails (= 3.2.5)
   shoulda
+  shoulda-matchers
   simple_form (= 2.0.4)
   therubyracer
   twilio-ruby
   uglifier
-  vcr
   voice_extension!
   webmock
