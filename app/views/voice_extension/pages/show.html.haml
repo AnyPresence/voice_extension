@@ -10,7 +10,8 @@
   %li 
     = link_to 'Voice Extension', settings_path
     %span.divider /
-
+= link_to edit_page_path(@page), class: 'btn btn-medium btn-primary' do
+  Edit page
 = link_to new_page_menu_option_path([@page, @menu_option]), class: 'btn btn-medium btn-primary' do
   Add menu option
   

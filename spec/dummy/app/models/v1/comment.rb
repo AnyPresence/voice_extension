@@ -4,5 +4,6 @@ class V1::Comment
   include AP::VoiceExtension
   
   field :"_id", as: :id, type: String
+  field :description, type: String, default: "Default!"
      
 end

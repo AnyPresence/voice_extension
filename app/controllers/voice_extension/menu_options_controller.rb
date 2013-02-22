@@ -4,7 +4,6 @@ module VoiceExtension
   class MenuOptionsController < ApplicationController
     before_filter :authenticate_admin!
     before_filter :get_page, only: [:edit, :update, :new, :create]
-    before_filter :get_main_app_models, only: [:edit, :new]
     
     def index
       @menu_options = VoiceExtension::MenuOption.all
@@ -29,11 +28,6 @@ module VoiceExtension
           if !params[:forward_page_transition].blank?
             forward_page_transition = VoiceExtension::Page.find(params[:forward_page_transition])
             @menu_option.update_attributes(forward_page: forward_page_transition) if !forward_page_transition.blank? && @menu_option.forward_page != forward_page_transition
-          end
-          
-          if !params[:object_definition].blank?
-            object_definition = VoiceExtension::ObjectDefinition.find_or_create_by(name: params[:object_definition])
-            @menu_option.update_attributes(object_definition: object_definition)
           end
           
           format.html { redirect_to page_path(@page), notice: 'Menu Option was successfully updated.' }
@@ -68,11 +62,6 @@ module VoiceExtension
       @menu_option = VoiceExtension::MenuOption.new(params[:menu_option])      
       @page.menu_options << @menu_option
       
-      if !params[:object_definition].blank?
-        object_definition = VoiceExtension::ObjectDefinition.find_or_create_by(name: params[:object_definition])
-        @menu_option.object_definition = object_definition
-      end
-      
       respond_to do |format|
         if @menu_option.save
           format.html { redirect_to page_path(@page), notice: 'Menu Option was successfully created.' }
@@ -98,18 +87,6 @@ module VoiceExtension
     def get_page
       @page = VoiceExtension::Page.find(params[:page_id])
     end
-    
-    def get_main_app_models
-      @available_object_definitions = "#{::AP::VoiceExtension::Voice::Config.instance.latest_version.upcase}".constantize.constants
-      if @available_object_definitions.blank?
-        version = ::AP::VoiceExtension::Voice::Config.instance.latest_version
-        Dir.glob(Rails.root.join("app", "models", version, "*.rb")).each do |f|
-          "::#{version.upcase}::#{File.basename(f, '.*').camelize}".constantize.name 
-        end
-
-        @available_object_definitions = "#{::AP::VoiceExtension::Voice::Config.instance.latest_version.upcase}".constantize.constants
-      end
-      @available_object_definitions.delete(:Custom)
-    end
+  
   end
 end

@@ -32,13 +32,16 @@ module VoiceExtension
       
       response = nil
       if pressed_value.blank?
-        response = Twilio::TwiML::Response.new do |r|
-          r.Say "Hello, Welcome to Anypresence's voice system:", :voice => 'woman'
-        
-          r.Say "Press the pound key after you are done keying in your selection.", :voice => 'woman'
-        
+        response = Twilio::TwiML::Response.new do |r|        
           # Get root page
           page = VoiceExtension::Page.root_page.first
+          if page.text_to_voice.blank?
+            # Say default
+            r.Say "Hello, Welcome to Anypresence's voice system:", :voice => 'woman'
+            r.Say "Press the pound key after you are done keying in your selection.", :voice => 'woman'
+          else
+            r.Say page.speak, :voice => 'woman'
+          end
           page.menu_options.order_by('keyed_value ASC').each do |option|
             r.Say "Press #{option.keyed_value} for #{option.format}", :voice => 'woman'
           end
@@ -52,14 +55,19 @@ module VoiceExtension
         response = Twilio::TwiML::Response.new do |r|
           r.Say "You pressed: #{pressed_value}", :voice => 'woman'
           
-          # Get page for key'ed value
+          # Get page for key'ed value and voice it out
           menu_option = page.menu_options.where(keyed_value: pressed_value).first
           if menu_option.blank? && menu_option.forward_page.blank?
             Rails.logger.error "There's no page to transition to."
             r.Say GENERIC_ERROR_MESSAGE_TO_VOICE, :voice => 'woman'
           else
             next_page = menu_option.forward_page
-            if !next_page.menu_options.blank?
+            if next_page
+              to_say = next_page.speak
+              Rails.logger.info "Will say: #{to_say}"
+              r.Say to_say, :voice => 'woman' if !next_page.text_to_voice.blank?
+            end
+            if next_page && !next_page.menu_options.blank?
               next_page.menu_options.order_by('keyed_value ASC').each do |option|
                 r.Say "Press #{option.keyed_value} for #{option.format}", :voice => 'woman'
               end
@@ -72,49 +80,6 @@ module VoiceExtension
       end
       response    
     end
-  
-  
-    # Parse format string from menu options
-    # The input string uses the Liquid template format, e.g. "Outage: {{title}} : {{description}}".
-    # 'title' and 'description' are attributes for the 'outage' object.
-    #   If the attributes for a particular outage object are: title => "Widespread Outage", description => "Around D.C. area."
-    #   Then the rendered text should be "Outage: Widespread Outage : Around D.C. area".
-    def self.parse_format_string(format, object_name, decoded_json)
-      klass = self.build_liquid_drop_class(object_name, decoded_json.keys)
-      # Set instance variables for klass from decoded json
-      klass_instance = klass.new(decoded_json)
-    
-      vars = klass_instance.instance_variables.map {|v| v.to_s[1..-1] }
-      liquid_hash = {}
-      vars.each do |v|
-        liquid_hash[v] = klass_instance.send v
-      end
-    
-      liquid_hash[object_name.downcase] = klass_instance
-      Liquid::Template.parse(format).render(liquid_hash)
-    end
 
-    # Builds a liquid drop class from the object_name
-    def self.build_liquid_drop_class(object_name, fields)
-      klass = Class.new(Liquid::Drop) do
-        define_method(:initialize) do |arg|
-          arg.each do |k,v|
-            instance_variable_set("@#{k}", v)
-          end
-        end
-      
-        fields.each do |field|
-          define_method("#{field}=") do |arg|
-            instance_variable_set("@#{field}", arg)
-          end
-          define_method field do
-            instance_variable_get("@#{field}")
-          end
-        end
-      end
-      klass
-    end
-
-  
   end
 end
