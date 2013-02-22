@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    voice_extension (0.0.1)
+    voice_extension (0.0.2)
       faraday
       json
       liquid
