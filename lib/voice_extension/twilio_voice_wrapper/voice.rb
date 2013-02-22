@@ -1,21 +1,17 @@
 module VoiceExtension
   module TwilioVoiceWrapper
 
-    class << self
-      def sign_secret(shared_secret_key, application_id, timestamp)
-        anypresence_auth = Digest::SHA1.hexdigest("#{shared_secret_key}-#{application_id}-#{timestamp}")
-        {:anypresence_auth => anypresence_auth, :application_id => application_id, :timestamp => timestamp.to_s}
-      end
-    end
+    # class << self
+    #   def sign_secret(shared_secret_key, application_id, timestamp)
+    #     anypresence_auth = Digest::SHA1.hexdigest("#{shared_secret_key}-#{application_id}-#{timestamp}")
+    #     {:anypresence_auth => anypresence_auth, :application_id => application_id, :timestamp => timestamp.to_s}
+    #   end
+    # end
   
     class Voice
     
-      def initialize(account_id)
-        @account_id = account_id
-      end
-    
       def twilio_account
-        @twilio_account ||= Twilio::REST::Client.new(ENV['VOICE_EXTENSION_TWILIO_ACCOUNT_SID'], ENV['VOICE_EXTENSION_TWILIO_AUTH_TOKEN']).account 
+        @twilio_account ||= Twilio::REST::Client.new(ENV['AP_IVR_NOTIFIER_TWILIO_ACCOUNT_SID'], ENV['AP_IVR_NOTIFIER_TWILIO_AUTH_TOKEN']).account 
       end
     
       # Provisions new phone number with Twilio.
@@ -49,15 +45,15 @@ module VoiceExtension
         twilio_account.calls.create options
       end
     
-      # Updates VOICE_URL for phone number
-      def update_voice_url(phone_number)
+      # Updates VOICE_URL for given +phone_number+ with +consume_url+
+      def update_voice_url(phone_number, consume_url)
         twilio_owned_numbers = twilio_account.incoming_phone_numbers.list
         sid = ""
         twilio_owned_numbers.each do |x|
-          sid = x.sid if x.phone_number.match(Message::strip_phone_number_prefix(phone_number))
+          sid = x.sid if x.phone_number.match(::VoiceExtension::Message.strip_phone_number_prefix(phone_number))
         end
       
-        twilio_account.incoming_phone_numbers.get(sid).update({:voice_url => ENV['VOICE_EXTENSION_VOICE_CONSUME_URL']})
+        twilio_account.incoming_phone_numbers.get(sid).update({:voice_url => consume_url})
       end
     
       def find_available_purchased_phone_number(used_numbers)    

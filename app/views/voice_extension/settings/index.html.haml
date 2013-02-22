@@ -1,0 +1,32 @@
+= javascript_include_tag "voice_extension/application"
+
+%ul.breadcrumb
+  %li
+    = link_to 'Home', main_app.admin_root_path
+    %span.divider /
+  %li
+    = link_to 'Extensions', main_app.admin_extensions_path
+    %span.divider /
+  %li.active Voice Extensions
+  
+.alert.alert-info
+  %h1 Voice Extensions
+  %p Manage voice extension settings.
+
+- if flash[:error]
+  .alert.alert-info
+    %h1= flash[:error]
+    
+= link_to pages_path, class: 'btn btn-medium btn-primary' do
+  Configure Pages
+  %i.icon-circle-arrow-right
+%br
+= form_tag modify_settings_path do
+  = label_tag "Twilio phone number"
+  = text_field_tag :twilio_phone_number, @twilio_phone_number
+  %br
+  = label_tag "Consume URL"
+  = text_field_tag :consume_url, @consume_url
+  %br
+  = submit_tag "Update", {class: 'btn btn-primary'}
+  

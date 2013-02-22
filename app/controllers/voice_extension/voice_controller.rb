@@ -50,7 +50,7 @@ module VoiceExtension
 
     # Builds the +Consumer+ which accesses Twilio.
     def build_twilio_wrapper
-      @twilio_wrapper = ::VoiceExtension::TwilioVoiceWrapper::Voice.new(current_account.id)
+      @twilio_wrapper = ::VoiceExtension::TwilioVoiceWrapper::Voice.new
     end
   end
 end
