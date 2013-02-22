@@ -11,7 +11,7 @@ module VoiceExtension
     
     scope :root_page, where(root: true)
     
-    has_many :menu_options, class_name: "VoiceExtension::MenuOption", inverse_of: :page
+    has_many :menu_options, class_name: "VoiceExtension::MenuOption", inverse_of: :page, :dependent => :destroy
     
     belongs_to :from_menu_option, class_name: "VoiceExtension::MenuOption", inverse_of: :forward_page
     belongs_to :object_definition, class_name: "VoiceExtension::ObjectDefinition", inverse_of: :pages
