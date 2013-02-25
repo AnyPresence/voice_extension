@@ -1,17 +1,12 @@
+require "twilio-ruby"
+
 module VoiceExtension
   module TwilioVoiceWrapper
-
-    # class << self
-    #   def sign_secret(shared_secret_key, application_id, timestamp)
-    #     anypresence_auth = Digest::SHA1.hexdigest("#{shared_secret_key}-#{application_id}-#{timestamp}")
-    #     {:anypresence_auth => anypresence_auth, :application_id => application_id, :timestamp => timestamp.to_s}
-    #   end
-    # end
   
     class Voice
     
       def twilio_account
-        @twilio_account ||= Twilio::REST::Client.new(ENV['AP_IVR_NOTIFIER_TWILIO_ACCOUNT_SID'], ENV['AP_IVR_NOTIFIER_TWILIO_AUTH_TOKEN']).account 
+        @twilio_account ||= ::Twilio::REST::Client.new(ENV['AP_IVR_NOTIFIER_TWILIO_ACCOUNT_SID'], ENV['AP_IVR_NOTIFIER_TWILIO_AUTH_TOKEN']).account 
       end
     
       # Provisions new phone number with Twilio.
