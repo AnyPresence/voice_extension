@@ -7,26 +7,33 @@
   %li
     = link_to 'Extensions', main_app.admin_extensions_path
     %span.divider /
-  %li.active Voice Extensions
+  %li.active IVR Extension
   
 .alert.alert-info
-  %h1 Voice Extensions
+  %h1 IVR Extension
   %p Manage voice extension settings.
 
 - if flash[:error]
-  .alert.alert-info
-    %h1= flash[:error]
-    
-= link_to pages_path, class: 'btn btn-medium btn-primary' do
-  Configure Pages
-  %i.icon-circle-arrow-right
-%br
-= form_tag modify_settings_path do
-  = label_tag "Twilio phone number"
-  = text_field_tag :consume_phone_number, @consume_phone_number
-  %br
-  = label_tag "Consume URL"
-  = text_field_tag :consume_url, @consume_url
-  %br
-  = submit_tag "Update", {class: 'btn btn-primary'}
-  
+  .alert.alert-error= flash[:error]
+
+.row-fluid
+  .span8
+    %hr
+    = link_to pages_path, class: 'btn btn-large btn-primary' do
+      Configure Pages
+      %i.icon-circle-arrow-right
+    %hr
+  .span4
+    .well
+      %h4 IVR Settings
+      %p.muted Update IVR settings here.
+      = form_tag modify_settings_path do
+        .control-group
+          = label_tag :consume_phone_number, 'Twilio phone number'
+          .controls= text_field_tag :consume_phone_number, @consume_phone_number
+        
+        .control-group
+          = label_tag :consume_url, 'Consume URL'
+          .controls= text_field_tag :consume_url, @consume_url
+        
+        = submit_tag "Update", {class: 'btn btn-small'}

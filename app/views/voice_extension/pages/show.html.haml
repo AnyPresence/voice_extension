@@ -7,31 +7,54 @@
   %li
     = link_to 'Extensions', main_app.admin_extensions_path
     %span.divider /
-  %li 
-    = link_to 'Voice Extension', settings_path
+  %li
+    = link_to 'IVR Extension', settings_path
     %span.divider /
-= link_to edit_page_path(@page), class: 'btn btn-medium btn-primary' do
-  Edit page
-= link_to new_page_menu_option_path([@page, @menu_option]), class: 'btn btn-medium btn-primary' do
-  Add menu option
-  
-%table.table.table-striped
-  %thead
-    %tr
-      %th Key
-      %th Name
-      %th Format
-      %th Page transition
-      %th Action
-  %tbody
-    = @menu_options.each do |option|
+  %li
+    = link_to 'Pages', pages_path
+    %span.divider /
+  %li.active= @page.name
+
+
+.page-header.clearfix
+  %h1= @page.name
+  = link_to edit_page_path(@page), class: 'btn' do
+    %i.icon-edit
+    Edit page
+
+- if @menu_options.size == 0
+  .alert
+    No menu options yet.
+    %br
+    = link_to 'Add a menu option', new_page_menu_option_path([@page, @menu_option]), class: 'btn btn-mini'
+- else
+  = link_to new_page_menu_option_path([@page, @menu_option]), class: 'btn btn-mini btn-primary' do
+    %i.icon-plus
+    Add menu option
+  %hr
+  %table.table.table-striped.table-bordered
+    %thead
       %tr
-        %td= option.keyed_value
-        %td= option.name
-        %td= option.format
-        %td
-          - if !option.forward_page.blank?
-            = link_to "#{option.forward_page.name}", option.forward_page
-        %td
-          = link_to "Edit", edit_page_menu_option_path(@page, option)
-          = link_to "Delete", [@page, option], method: :delete, data: { confirm: 'Are you sure?' }
+        %th.ap-text-right Key
+        %th Name
+        %th Format
+        %th Page transition
+        %th
+    %tbody
+      - @menu_options.each do |option|
+        %tr
+          %td.ap-text-right
+            .label.label-info= option.keyed_value
+          %td= option.name
+          %td= option.format
+          %td
+            - if !option.forward_page.blank?
+              = link_to "#{option.forward_page.name}", option.forward_page
+          %td
+            .btn-group.pull-right
+              = link_to edit_page_menu_option_path(@page, option), class: 'btn btn-mini' do
+                %i.icon-edit
+                Edit
+              = link_to [@page, option], method: :delete, class: 'btn btn-mini', data: {confirm: 'Are you sure?'} do
+                %i.icon-remove
+                Delete

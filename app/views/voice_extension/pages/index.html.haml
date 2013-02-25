@@ -7,33 +7,40 @@
   %li
     = link_to 'Extensions', main_app.admin_extensions_path
     %span.divider /
-  %li.active Voice Extensions
-  
-.alert.alert-info
-  %h1 Voice Extensions
-  %p Manage voice extension settings.
+  %li
+    = link_to 'IVR Extension', settings_path
+    %span.divider /
+  %li.active Pages
 
-= link_to new_page_path, class: 'btn btn-medium btn-primary' do
-  Add Page
-  %i.icon-circle-arrow-right
-%br
+.page-header
+  %h1 Pages
+  = link_to new_page_path, class: 'btn btn-mini btn-primary' do
+    %i.icon-plus
+    Add Page
+
 - if @pages.empty?
-  %p No page available...
-%table.table.table-striped
-  %thead
-    %tr
-      %th Name
-      %th Root
-  %tbody
-    - @pages.each do |page|
+  .alert No pages yet.
+- else
+  %table.table.table-striped
+    %thead
       %tr
-        %td= link_to "#{page.name}", page
-        %td
-          - if page.root
-            = check_box_tag "root", "yes", true, {disabled: true}
-        %td 
-          = link_to "Edit", edit_page_path(page)
-          = link_to "Delete", page, method: :delete, data: { confirm: 'Are you sure?' }
-
-%br
-
+        %th Name
+        %th.ap-text-center Root?
+    %tbody
+      - @pages.each do |page|
+        %tr
+          %td= link_to "#{page.name}", page
+          %td.ap-text-center
+            - if page.root
+              %i.icon-ok
+          %td
+            .btn-group.pull-right
+              = link_to page, class: 'btn btn-mini' do
+                %i.icon-list-ul
+                Manage Menus
+              = link_to edit_page_path(page), class: 'btn btn-mini' do
+                %i.icon-edit
+                Edit
+              = link_to page, method: :delete, class: 'btn btn-mini', data: {confirm: 'Are you sure?'} do
+                %i.icon-remove
+                Delete

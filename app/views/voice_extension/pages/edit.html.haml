@@ -5,9 +5,18 @@
   %li
     = link_to 'Extensions', main_app.admin_extensions_path
     %span.divider /
-  %li 
-    = link_to 'Voice Extension', settings_path
+  %li
+    = link_to 'IVR Extension', settings_path
     %span.divider /
-%br
-%br
+  %li
+    = link_to 'Pages', pages_path
+    %span.divider /
+  %li
+    = link_to @page.name, @page
+    %span.divider /
+  %li.active Edit
+
+.page-header
+  %h1 Edit Page
+
 = render :partial => "form", :locals => { :page => @page }

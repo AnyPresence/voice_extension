@@ -5,8 +5,17 @@
   %li
     = link_to 'Extensions', main_app.admin_extensions_path
     %span.divider /
-  %li.active Voice Extensions
-  
+  %li
+    = link_to 'IVR Extension', settings_path
+    %span.divider /
+  %li
+    = link_to 'Pages', pages_path
+    %span.divider /
+  %li
+    = link_to @menu_options.page.name, @page
+    %span.divider /
+  %li.active Edit
+
 .alert.alert-info
   %h1 Voice Extensions
   %p Manage voice extension settings.

@@ -1,20 +1,23 @@
-= simple_form_for(page) do |f|
+= simple_form_for(page, html: {class: 'form-horizontal'}) do |f|
   .form-inputs
     = f.error :base
     = f.error_notification
     = f.input :name
     = f.input :root, as: :boolean
-    = f.input :text_to_voice, as: :text
-    = f.label "Pick an object definition (optional)"
-    = label_tag '', class: 'radio' do
-      = radio_button_tag "object_definition", "none", false
-      = "None"
-    - @available_object_definitions.each do |object|
-      = label_tag '', class: 'radio' do
-        - if page.object_definition && (object.to_s == page.object_definition.name)
-          = radio_button_tag "object_definition", object.to_s, true
-        - else
-          = radio_button_tag "object_definition", object.to_s, false
-        = object.to_s
+    = f.input :text_to_voice, as: :text, input_html: {rows: 5}
+    .control-group
+      = f.label "Pick an object definition (optional)"
+      .controls
+        = label_tag '', class: 'radio' do
+          = radio_button_tag "object_definition", "none", false
+          = "None"
+        - @available_object_definitions.each do |object|
+          = label_tag '', class: 'radio' do
+            - if page.object_definition && (object.to_s == page.object_definition.name)
+              = radio_button_tag "object_definition", object.to_s, true
+            - else
+              = radio_button_tag "object_definition", object.to_s, false
+            = object.to_s
   .form-actions
     = f.button :submit, {class: 'btn btn-primary'}
+    = link_to 'Cancel', pages_path, class: 'btn'
