@@ -29,6 +29,7 @@ module VoiceExtension
       url = AP::VoiceExtension::Voice::Config.instance.configuration[:consume_url] || ENV['AP_IVR_NOTIFIER_CONSUME_URL']
       # match = url.match /^http(s?):\/\/.*?\//
       # url = match[0].gsub(/\/+$/,'') unless match.nil?
+      Rails.logger.info "Voice URL is: #{url}"
       
       response = nil
       if pressed_value.blank?

@@ -9,8 +9,9 @@ module VoiceExtension
       if AP::VoiceExtension::Voice::Config.instance.configuration[:consume_url].blank? && !@consume_phone_number.blank?
         # Retrieve voice url
         twilio_wrapper = VoiceExtension::TwilioVoiceWrapper::Voice.new
-        @consume_url = twilio_wrapper.get_voice_url(@consume_phone_number)    
-        @consume_url = "http://<your_host>/api/voice_extension/consume" if @consume_url.blank?
+        @consume_url = twilio_wrapper.get_voice_url(@consume_phone_number)
+        AP::VoiceExtension::Voice::Config.instance.configuration[:consume_url] = @consume_url
+        @consume_url = "http://<your_host>/api/voice_extension/consume/" if @consume_url.blank?
       else
         @consume_url = AP::VoiceExtension::Voice::Config.instance.configuration[:consume_url]
       end
@@ -23,6 +24,7 @@ module VoiceExtension
       # Try to set the consume url for the phone number
       begin 
         twilio_wrapper = VoiceExtension::TwilioVoiceWrapper::Voice.new
+        consume_url = "#{consume_url}/" if !consume_url.ends_with?("/")
         twilio_wrapper.update_voice_url(consume_phone_number, consume_url)
         AP::VoiceExtension::Voice::Config.instance.configuration.merge!(consume_phone_number: consume_phone_number, consume_url: consume_url)
       rescue
