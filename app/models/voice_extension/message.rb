@@ -7,7 +7,11 @@ module VoiceExtension
     # Twilio does not currently support toll-free number texting; and texting internationally is in beta.
     def self.strip_phone_number_prefix(phone_number)
       num = phone_number.strip
-      num[-10..-1] if num.size >= 10
+      if num.size >= 10
+        num[-10..-1]
+      else
+        num
+      end
     end
   end
 end
