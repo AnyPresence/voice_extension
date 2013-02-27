@@ -50,6 +50,16 @@ module VoiceExtension
       
         twilio_account.incoming_phone_numbers.get(sid).update({:voice_url => consume_url})
       end
+      
+      def get_voice_url(phone_number)
+        twilio_owned_numbers = twilio_account.incoming_phone_numbers.list
+        sid = ""
+        twilio_owned_numbers.each do |x|
+          sid = x.sid if x.phone_number.match(::VoiceExtension::Message.strip_phone_number_prefix(phone_number))
+        end
+      
+        twilio_account.incoming_phone_numbers.get(sid).voice_url || ""
+      end
     
       def find_available_purchased_phone_number(used_numbers)    
         # Check to see if there are numbers that we own that are not being used by any account
