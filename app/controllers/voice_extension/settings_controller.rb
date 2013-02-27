@@ -6,7 +6,7 @@ module VoiceExtension
     
     def index
       @consume_phone_number = AP::VoiceExtension::Voice::Config.instance.configuration[:consume_phone_number] || ""
-      @consume_url = AP::VoiceExtension::Voice::Config.instance.configuration[:consume_url] || ""
+      @consume_url = AP::VoiceExtension::Voice::Config.instance.configuration[:consume_url] || "http://<your_host>/api/voice_extension/consume"
     end
     
     def update
@@ -19,6 +19,8 @@ module VoiceExtension
       begin 
         twilio_wrapper = VoiceExtension::TwilioVoiceWrapper::Voice.new
         twilio_wrapper.update_voice_url(consume_phone_number, consume_url)
+        AP::VoiceExtension::Voice::Config.instance.configuration[:consume_phone_number] = consume_phone_number
+        AP::VoiceExtension::Voice::Config.instance.configuration[:consume_url] = consume_url
       rescue
         error = "Unable to setup the twilio phone number/url: #{$!.message}"
         Rails.logger.error(error)
