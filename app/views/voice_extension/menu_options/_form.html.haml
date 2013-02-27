@@ -15,8 +15,8 @@
             - else
               = radio_button_tag "forward_page_transition", page.id.to_s, false
             = page.name.to_s
-            %br
-            = link_to "Create new page", new_page_path
+      %br
+      = link_to "Create new page", new_page_path
   .form-actions
     = f.button :submit, {class: 'btn btn-primary'}
     = link_to 'Cancel', @page, class: 'btn'
