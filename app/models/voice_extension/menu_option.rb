@@ -26,7 +26,7 @@ module VoiceExtension
     #   the main menu.
     # +page+ is the page which displayed the options that resulted in this key press.
     def self.build_menu_option(pressed_value=nil, page=nil)
-      url = ENV['AP_IVR_NOTIFIER_CONSUME_URL']
+      url = AP::VoiceExtension::Voice::Config.instance.configuration[:consume_url] || ENV['AP_IVR_NOTIFIER_CONSUME_URL']
       # match = url.match /^http(s?):\/\/.*?\//
       # url = match[0].gsub(/\/+$/,'') unless match.nil?
       

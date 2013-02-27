@@ -9,7 +9,8 @@ module VoiceExtension
       if AP::VoiceExtension::Voice::Config.instance.configuration[:consume_url].blank? && !@consume_phone_number.blank?
         # Retrieve voice url
         twilio_wrapper = VoiceExtension::TwilioVoiceWrapper::Voice.new
-        @consume_url = twilio_wrapper.get_voice_url(@consume_phone_number)
+        @consume_url = twilio_wrapper.get_voice_url(@consume_phone_number)    
+        @consume_url = "http://<your_host>/api/voice_extension/consume" if @consume_url.blank?
       else
         @consume_url = AP::VoiceExtension::Voice::Config.instance.configuration[:consume_url]
       end
