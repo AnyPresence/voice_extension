@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 3.2.11"
   s.add_dependency "json"
   s.add_dependency "multi_json"
-  s.add_dependency "mongoid", "~> 3.0.6"
+  s.add_dependency "mongoid", "~> 3.1"
   s.add_dependency "liquid"
   s.add_dependency "local-env"
   s.add_dependency "faraday"
