@@ -3,16 +3,16 @@
 %ul.breadcrumb
   %li
     = link_to 'Home', main_app.admin_root_path
-    %span.divider /
+    
   %li
     = link_to 'Extensions', main_app.admin_extensions_path
-    %span.divider /
+    
   %li
     = link_to 'IVR Extension', settings_path
-    %span.divider /
+    
   %li
     = link_to 'Pages', pages_path
-    %span.divider /
+    
   %li.active= @page.name
 
 
@@ -26,13 +26,13 @@
   .alert
     No menu options yet.
     %br
-    = link_to 'Add a menu option', new_page_menu_option_path([@page, @menu_option]), class: 'btn btn-mini'
+    = link_to 'Add a menu option', new_page_menu_option_path([@page, @menu_option]), class: 'btn btn-xs'
 - else
-  = link_to new_page_menu_option_path([@page, @menu_option]), class: 'btn btn-mini btn-primary' do
+  = link_to new_page_menu_option_path([@page, @menu_option]), class: 'btn btn-xs btn-primary' do
     %i.icon-plus
     Add menu option
   %hr
-  %table.table.table-striped.table-bordered
+  %table.table.table-striped
     %thead
       %tr
         %th.ap-text-right Key
@@ -52,9 +52,9 @@
               = link_to "#{option.forward_page.name}", option.forward_page
           %td
             .btn-group.pull-right
-              = link_to edit_page_menu_option_path(@page, option), class: 'btn btn-mini' do
+              = link_to edit_page_menu_option_path(@page, option), class: 'btn btn-xs' do
                 %i.icon-edit
                 Edit
-              = link_to [@page, option], method: :delete, class: 'btn btn-mini', data: {confirm: 'Are you sure?'} do
+              = link_to [@page, option], method: :delete, class: 'btn btn-xs', data: {confirm: 'Are you sure?'} do
                 %i.icon-remove
                 Delete

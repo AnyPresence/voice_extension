@@ -5,9 +5,10 @@
     = f.input :name
     = f.input :root, as: :boolean
     = f.input :text_to_voice, as: :text, input_html: {rows: 5}
-    .control-group
-      = f.label "Pick an object definition (optional)"
-      .controls
+    .form-group
+      .col-md-3
+        %label Pick an object definition (optional)
+      .col-md-9
         = label_tag '', class: 'radio' do
           = radio_button_tag "object_definition", "none", false
           = "None"

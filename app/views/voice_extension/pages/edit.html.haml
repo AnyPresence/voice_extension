@@ -1,19 +1,19 @@
 %ul.breadcrumb
   %li
     = link_to 'Home', main_app.admin_root_path
-    %span.divider /
+    
   %li
     = link_to 'Extensions', main_app.admin_extensions_path
-    %span.divider /
+    
   %li
     = link_to 'IVR Extension', settings_path
-    %span.divider /
+    
   %li
     = link_to 'Pages', pages_path
-    %span.divider /
+    
   %li
     = link_to @page.name, @page
-    %span.divider /
+    
   %li.active Edit
 
 .page-header
