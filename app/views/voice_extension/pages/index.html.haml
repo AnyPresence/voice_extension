@@ -15,7 +15,7 @@
 .page-header
   %h1 Pages
   = link_to new_page_path, class: 'btn btn-xs btn-primary' do
-    %i.icon-plus
+    %i.fa.fa-plus
     Add Page
 
 - if @pages.empty?
@@ -32,15 +32,15 @@
           %td= link_to "#{page.name}", page
           %td.ap-text-center
             - if page.root
-              %i.icon-ok
+              %i.fa.fa-check
           %td
             .btn-group.pull-right
               = link_to page, class: 'btn btn-xs' do
-                %i.icon-list-ul
+                %i.fa.fa-list-ul
                 Manage Menus
               = link_to edit_page_path(page), class: 'btn btn-xs' do
-                %i.icon-edit
+                %i.fa.fa-pencil
                 Edit
               = link_to page, method: :delete, class: 'btn btn-xs', data: {confirm: 'Are you sure?'} do
-                %i.icon-remove
+                %i.fa.fa-trash-o
                 Delete
