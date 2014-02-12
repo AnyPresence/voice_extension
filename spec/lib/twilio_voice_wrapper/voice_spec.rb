@@ -5,9 +5,9 @@ describe VoiceExtension::TwilioVoiceWrapper::Voice do
      twilio_client = double('twilio_client')
      Twilio::REST::Client.should_receive(:new).with(any_args()).and_return(twilio_client)
      @twilio_account = double('twilio_account')
-     twilio_client.should_receive(:account).and_return(@twilio_account) 
+     twilio_client.should_receive(:account).and_return(@twilio_account)
   end
-  
+
   describe "update voice url" do
     it "should update" do
       setup_twilio
